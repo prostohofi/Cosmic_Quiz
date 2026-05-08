@@ -39,7 +39,7 @@ class QuizView(arcade.View):
             width=self.window.width * 0.8,
         )
 
-        self.menu_sprites = self.window.create_dark_background()
+        self.bg_sprites = self.window.create_dark_background()
         self.current_question = arcade.Text(
             f"{self.question_idx + 1}/{len(self.questions)}",
             self.window.width // 2,
@@ -58,6 +58,15 @@ class QuizView(arcade.View):
             anchor_x="left",
             anchor_y="top",
         )
+        if self.question["картинка"]:
+            texture = arcade.load_texture(
+                config.IMG_DIR / "knowledge_slides" / self.question["картинка"],
+                )
+            self.question_picture = arcade.Sprite(
+                texture, center_x=self.window.width * 0.1,
+                    center_y=self.window.height // 2,
+                    )
+            self.sprites.append(self.question_picture)
 
     def make_buttons(self) -> None:
         """Создает кнопки с ответами."""
@@ -80,7 +89,8 @@ class QuizView(arcade.View):
     def on_draw(self) -> None:
         """Отрисовка игровых объектов."""
         self.clear()
-        self.menu_sprites.draw()
+        self.bg_sprites.draw()
+        self.sprites.draw()
         self.question_text.draw()
         for button in self.buttons:
             button.draw()
@@ -108,6 +118,7 @@ class QuizView(arcade.View):
 
     def load_question(self) -> None:
         """Загружает след. вопрос - новый текст и новые кнопки."""
+        self.sprites.clear()
         self.question_idx += 1
         if self.question_idx >= len(self.questions):
             self.window.right_answers = self.right_answers
@@ -118,5 +129,14 @@ class QuizView(arcade.View):
         self.current_question.text = f"{self.question_idx + 1}/{len(self.questions,)}"
         self.question = self.questions[self.question_idx]
         self.question_text.text = self.question["текст"]
+        if self.question["картинка"]:
+            texture = arcade.load_texture(
+                config.IMG_DIR / "knowledge_slides" / self.question["картинка"],
+                )
+            self.question_picture = arcade.Sprite(
+                texture, center_x=self.window.width * 0.1,
+                    center_y=self.window.height // 2,
+                    )
+            self.sprites.append(self.question_picture)
         self.buttons.clear()
         self.make_buttons()

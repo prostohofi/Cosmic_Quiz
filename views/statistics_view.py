@@ -4,8 +4,6 @@ import arcade
 import config
 from buttons import Button
 
-FONT_SIZE = 30
-
 
 class StatisticsView(arcade.View):
     """Представление статистики после викторины."""
@@ -23,7 +21,7 @@ class StatisticsView(arcade.View):
             anchor_x="center",
             anchor_y="center",
             align="center",
-            font_size=FONT_SIZE,
+            font_size=config.FONT_SIZE_M,
         )
 
         self.right_answers = right_answers

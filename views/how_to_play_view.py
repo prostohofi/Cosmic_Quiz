@@ -5,7 +5,6 @@ import arcade
 import config
 from buttons import Button
 
-FONT_SIZE = 30
 
 class HowToPlay(arcade.View):
     """Представление меню."""

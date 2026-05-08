@@ -6,7 +6,6 @@ import arcade.types
 import config
 from buttons import Button
 
-FONT_SIZE = 30
 
 class MenuView(arcade.View):
     """Представление меню."""
@@ -21,7 +20,7 @@ class MenuView(arcade.View):
             self.window.height // 2,
             anchor_x="center",
             anchor_y="center",
-            font_size=FONT_SIZE,
+            font_size=config.FONT_SIZE_S,
         )
         self.buttons = arcade.SpriteList()
         self.make_buttons()
@@ -29,21 +28,21 @@ class MenuView(arcade.View):
 
     def make_buttons(self) -> None:
         """Метод создания кнопок."""
-        button_width = self.window.width * 0.2
-        button_height = self.window.height * 0.1
-        spacing_hor = (self.window.width * 0.2 - button_width * 2) / 2
+        button_width = self.window.width * 0.15
+        button_height = self.window.height * 0.05
         spacing_vert = self.window.height * 0.1
-        buttons_names = ["Выйти", "Начать", "Познать", "Как играть"]
+        buttons_names = ["Выйти", "Начать", "Познать", "Как играть", "Статистика"]
+        button_x = self.window.width / (len(buttons_names) + 1)
         for button_name in buttons_names:
             button = Button(
                 button_width,
                 button_height,
-                spacing_hor + button_width * 1.4,
+                button_x,
                 spacing_vert,
                 text_str=button_name,
                 )
             self.buttons.append(button)
-            spacing_hor += self.window.width * 0.21
+            button_x += self.window.width / (len(buttons_names) + 1)
 
     def on_draw(self) -> None:
         """Отрисовывает спрайты и текст на экране."""
@@ -66,3 +65,5 @@ class MenuView(arcade.View):
                 self.window.show_knowledge_view()
             if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Как играть":
                 self.window.show_how_to_play_view()
+            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Статистика":
+                self.window.show_general_view()
