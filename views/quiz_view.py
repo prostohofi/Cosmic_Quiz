@@ -29,14 +29,14 @@ class QuizView(arcade.View):
         self.question = self.questions[self.question_idx]
         self.question_text = arcade.Text(
             self.question["текст"],
-            self.width // 2,
-            self.height // 2,
+            self.width * 0.7,
+            self.height * 0.6,
             anchor_x="center",
             anchor_y="center",
             align="center",
             font_size=config.FONT_SIZE_S,
             multiline=True,
-            width=self.window.width * 0.8,
+            width=self.window.width // 2,
         )
 
         self.bg_sprites = self.window.create_dark_background()
@@ -60,11 +60,12 @@ class QuizView(arcade.View):
         )
         if self.question["картинка"]:
             texture = arcade.load_texture(
-                config.IMG_DIR / "knowledge_slides" / self.question["картинка"],
+                config.IMG_DIR / "quiz_images" / self.question["картинка"],
                 )
             self.question_picture = arcade.Sprite(
-                texture, center_x=self.window.width * 0.1,
-                    center_y=self.window.height // 2,
+                texture, center_x=self.window.width * 0.2,
+                    center_y=self.window.height * 0.6,
+                    scale=0.65,
                     )
             self.sprites.append(self.question_picture)
 
@@ -74,7 +75,7 @@ class QuizView(arcade.View):
             button = Button(
                 len(self.question_text.text) * 7,
                 50,
-                self.width // 2,
+                self.width * 0.7,
                 self.height // 2 - (num * 100),
                 option,
             )
@@ -131,11 +132,12 @@ class QuizView(arcade.View):
         self.question_text.text = self.question["текст"]
         if self.question["картинка"]:
             texture = arcade.load_texture(
-                config.IMG_DIR / "knowledge_slides" / self.question["картинка"],
+                config.IMG_DIR / "quiz_images" / self.question["картинка"],
                 )
             self.question_picture = arcade.Sprite(
-                texture, center_x=self.window.width * 0.1,
-                    center_y=self.window.height // 2,
+                texture, center_x=self.window.width * 0.2,
+                    center_y=self.window.height * 0.6,
+                    scale=0.65,
                     )
             self.sprites.append(self.question_picture)
         self.buttons.clear()

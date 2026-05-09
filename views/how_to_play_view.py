@@ -37,28 +37,9 @@ class HowToPlay(arcade.View):
             )
         self.buttons = arcade.SpriteList()
         self.sprites = arcade.SpriteList()
-        self.make_buttons()
+        self.buttons = self.window.make_buttons(["В меню"])
         self.sprites.append(self.sprite_quiz)
         self.sprites.append(self.sprite_statistic)
-
-    def make_buttons(self) -> None:
-        """Метод создания кнопок."""
-        button_width = self.window.width * 0.2
-        button_height = self.window.height * 0.1
-        spacing_hor = (self.window.width * 0.2 - button_width * 2) / 2
-        spacing_vert = self.window.height * 0.1
-        buttons_names = ["В меню"]
-        button_x = self.window.width / (len(buttons_names) + 1)
-        for button_name in buttons_names:
-            button = Button(
-                button_width,
-                button_height,
-                spacing_hor + button_width * 2.5,
-                spacing_vert,
-                text_str=button_name,
-                )
-            self.buttons.append(button)
-            button_x += self.window.width / (len(buttons_names) + 1)
 
     def on_draw(self) -> None:
         """Отрисовывает спрайты и текст на экране."""

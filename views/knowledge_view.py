@@ -1,12 +1,13 @@
 """Модуль представления познавания."""
 import arcade
+import arcade.types
 
 import config
 from buttons import Button
 from knowledge import slide_texts_str
 
 
-class TeachView(arcade.View):
+class KnowledgeView(arcade.View):
     """Представление меню."""
 
     def __init__(self) -> None:
@@ -16,28 +17,21 @@ class TeachView(arcade.View):
         self.buttons = arcade.SpriteList()
         self.sprites = arcade.SpriteList()
         self.texts = []
-        self.make_buttons()
-        self.load_slide()
         self.total_slides = len(slide_texts_str)
+        self.current_slide = arcade.Text(
+            f"{self.slide_num}/{self.total_slides}",
+            self.window.width // 2,
+            self.window.height,
+            font_size=config.FONT_SIZE_S,
+            anchor_x="center",
+            anchor_y="top",
+        )
+        self.load_slide()
         self.menu_sprites = self.window.create_dark_background()
-
-    def make_buttons(self) -> None:
-        """Метод создания кнопок."""
-        button_width = self.window.width * 0.2
-        button_height = self.window.height * 0.1
-        spacing_vert = self.window.height * 0.1
-        buttons_names = ["Предыдущий", "Следующий", "В меню"]
-        button_x = self.window.width / (len(buttons_names) + 1)
-        for button_name in buttons_names:
-            button = Button(
-                button_width,
-                button_height,
-                button_x,
-                spacing_vert,
-                text_str=button_name,
-                )
-            self.buttons.append(button)
-            button_x += self.window.width / (len(buttons_names) + 1)
+        self.buttons = self.window.make_buttons(["Предыдущий",
+              "Следующий",
+              "В меню"],
+              )
 
     def load_slide(self) -> None:
         """Метод загрузки слайда."""
@@ -53,6 +47,7 @@ class TeachView(arcade.View):
             center_y=self.height // 2,
             )
         self.sprites.append(slide_image)
+        self.current_slide.text = f"{self.slide_num}/{self.total_slides}"
 
         slide_text_obj = arcade.Text(
             slide_texts_str[self.slide_num - 1],
@@ -72,6 +67,7 @@ class TeachView(arcade.View):
         """Отрисовывает спрайты и текст на экране."""
         self.clear()
         self.menu_sprites.draw()
+        self.current_slide.draw()
         for button in self.buttons:
             button.draw()
         self.sprites.draw()

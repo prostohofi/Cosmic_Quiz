@@ -1,10 +1,8 @@
 """Модуль показа меню."""
 
 import arcade
-import arcade.types
 
 import config
-from buttons import Button
 
 
 class MenuView(arcade.View):
@@ -22,27 +20,14 @@ class MenuView(arcade.View):
             anchor_y="center",
             font_size=config.FONT_SIZE_S,
         )
-        self.buttons = arcade.SpriteList()
-        self.make_buttons()
+        self.buttons = self.window.make_buttons(
+            ["Выйти",
+             "Начать",
+             "Познать",
+             "Как играть",
+             "Статистика",
+             ])
         self.menu_sprites = self.window.create_dark_background()
-
-    def make_buttons(self) -> None:
-        """Метод создания кнопок."""
-        button_width = self.window.width * 0.15
-        button_height = self.window.height * 0.05
-        spacing_vert = self.window.height * 0.1
-        buttons_names = ["Выйти", "Начать", "Познать", "Как играть", "Статистика"]
-        button_x = self.window.width / (len(buttons_names) + 1)
-        for button_name in buttons_names:
-            button = Button(
-                button_width,
-                button_height,
-                button_x,
-                spacing_vert,
-                text_str=button_name,
-                )
-            self.buttons.append(button)
-            button_x += self.window.width / (len(buttons_names) + 1)
 
     def on_draw(self) -> None:
         """Отрисовывает спрайты и текст на экране."""

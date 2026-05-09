@@ -2,7 +2,6 @@
 import arcade
 
 import config
-from buttons import Button
 
 
 class GeneralStatisticsView(arcade.View):
@@ -12,9 +11,12 @@ class GeneralStatisticsView(arcade.View):
         """Инициализирует представление статистики:правильные и неправильные ответы."""
         super().__init__()
         self.content = ""
+        self.number_string = 0
+        self.menu_sprites = self.window.create_dark_background()
         self.read()
         self.text_obj = arcade.Text(
-            self.content, self.window.width // 2,
+            f"{self.number_string}. {self.content}",
+            self.window.width // 2,
             self.window.height * 0.8,
             font_size=config.FONT_SIZE_S,
             multiline=True,
@@ -24,9 +26,11 @@ class GeneralStatisticsView(arcade.View):
             align="center",
             )
         self.buttons = arcade.SpriteList()
-        self.make_buttons()
+        self.buttons = self.window.make_buttons(["Меню"])
 
-    def read(self):
+    def read(self) -> None:
+        """Метод, который берёт из файла статистики текст."""
+        self.number_string += 1
         file_wrapper = open(
             config.BASE_DIR / "statistics.txt",
             mode="r",
@@ -34,30 +38,14 @@ class GeneralStatisticsView(arcade.View):
             ) # Если не найдёт, то подавится
         self.content = file_wrapper.read()
 
-    def on_draw(self):
+    def on_draw(self) -> None:
+        """Метод отрисовки."""
         self.clear()
+        self.menu_sprites.draw()
         self.text_obj.draw()
         self.buttons.draw()
         for button in self.buttons:
             button.draw()
-
-    def make_buttons(self) -> None:
-        """Метод создания кнопок."""
-        button_width = self.window.width * 0.15
-        button_height = self.window.height * 0.05
-        spacing_vert = self.window.height * 0.1
-        buttons_names = ["Меню"]
-        button_x = self.window.width / (len(buttons_names) + 1)
-        for button_name in buttons_names:
-            button = Button(
-                button_width,
-                button_height,
-                button_x,
-                spacing_vert,
-                text_str=button_name,
-                )
-            self.buttons.append(button)
-            button_x += self.window.width / (len(buttons_names) + 1)
 
     def on_mouse_press(self, x: int, y: int, button: int, _: int) -> None:
         """Нажатие кнопок."""
