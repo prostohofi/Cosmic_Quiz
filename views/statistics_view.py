@@ -1,4 +1,6 @@
 """Модуль статистики."""
+from pathlib import Path
+
 import arcade
 
 import config
@@ -47,7 +49,7 @@ class StatisticsView(arcade.View):
 
     def write_statistics(self) -> None:
         """Метод записи статистики в файл."""
-        file_wrapper = open(
+        file_wrapper = Path.open(
             config.BASE_DIR / "statistics.txt",
             mode="a",
             encoding="utf-8",

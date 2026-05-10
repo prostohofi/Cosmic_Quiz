@@ -1,21 +1,24 @@
 """Модуль общей статистики."""
+from pathlib import Path
+
 import arcade
 
 import config
+from utils import get_formated_time
 
 
 class GeneralStatisticsView(arcade.View):
-    """Представление  общей статистики."""
+    """Представление общей статистики."""
 
     def __init__(self) -> None:
-        """Инициализирует представление статистики:правильные и неправильные ответы."""
+        """Инициализирует представление статистики: правильные и неправильные ответы."""
         super().__init__()
         self.content = ""
-        self.number_string = 0
+        self.number_parts_string = 3
         self.menu_sprites = self.window.create_dark_background()
         self.read()
         self.text_obj = arcade.Text(
-            f"{self.number_string}. {self.content}",
+            self.content,
             self.window.width // 2,
             self.window.height * 0.8,
             font_size=config.FONT_SIZE_S,
@@ -24,19 +27,36 @@ class GeneralStatisticsView(arcade.View):
             anchor_x="center",
             anchor_y="center",
             align="center",
-            )
+        )
         self.buttons = arcade.SpriteList()
         self.buttons = self.window.make_buttons(["Меню"])
 
     def read(self) -> None:
-        """Метод, который берёт из файла статистики текст."""
-        self.number_string += 1
-        file_wrapper = open(
-            config.BASE_DIR / "statistics.txt",
-            mode="r",
-            encoding="utf-8",
-            ) # Если не найдёт, то подавится
-        self.content = file_wrapper.read()
+        """Метод, который берёт из файла статистики текст и форматирует с иконками."""
+        try:
+            with Path.open(
+                config.BASE_DIR / "statistics.txt",
+                encoding="utf-8",
+            ) as file_wrapper:
+                lines = file_wrapper.readlines()
+                numbered_lines = []
+                for i, line in enumerate(lines, start=1):
+                    rs_line = line.rstrip("\n\r")
+                    if rs_line.strip():
+                        parts = rs_line.split()
+                        if len(parts) >= self.number_parts_string:
+                            correct = parts[0]
+                            incorrect = parts[1]
+                            time = get_formated_time(float(parts[2]))
+                            formatted_line = f"{i}. ✅{correct} ❌{incorrect} 🕔{time}"
+                        else:
+                            formatted_line = f"{i}. {rs_line}"
+                        numbered_lines.append(formatted_line)
+                    else:
+                        numbered_lines.append(f"{i}. (пустая строка)")
+                self.content = "\n".join(numbered_lines)
+        except FileNotFoundError:
+            self.content = "Файл статистики не найден"
 
     def on_draw(self) -> None:
         """Метод отрисовки."""
@@ -52,5 +72,7 @@ class GeneralStatisticsView(arcade.View):
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         for sprite_button in self.buttons:
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Меню":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Меню":
                 self.window.show_menu_view()

@@ -3,7 +3,6 @@ import arcade
 import arcade.types
 
 import config
-from buttons import Button
 from knowledge import slide_texts_str
 
 
@@ -26,12 +25,12 @@ class KnowledgeView(arcade.View):
             anchor_x="center",
             anchor_y="top",
         )
-        self.load_slide()
-        self.menu_sprites = self.window.create_dark_background()
         self.buttons = self.window.make_buttons(["Предыдущий",
               "Следующий",
               "В меню"],
               )
+        self.load_slide()
+        self.menu_sprites = self.window.create_dark_background()
 
     def load_slide(self) -> None:
         """Метод загрузки слайда."""
@@ -63,6 +62,20 @@ class KnowledgeView(arcade.View):
 
         self.texts.append(slide_text_obj)
 
+        self.buttons[1].color = arcade.types.Color(
+            255,
+            255,
+            255,
+            100 if self.slide_num == self.total_slides else 255,
+            )
+
+        self.buttons[0].color = arcade.types.Color(
+             255,
+             255,
+             255,
+             100 if self.slide_num == 1 else 255,
+             )
+
     def on_draw(self) -> None:
         """Отрисовывает спрайты и текст на экране."""
         self.clear()
@@ -79,11 +92,18 @@ class KnowledgeView(arcade.View):
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         for sprite_button in self.buttons:
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Следующий" and self.slide_num < self.total_slides:
+            if sprite_button.collides_with_point(
+                (x,
+                y),
+                ) and sprite_button.text_str == "Следующий" and self.slide_num < self.total_slides:
                     self.slide_num += 1
                     self.load_slide()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Предыдущий" and self.slide_num > 1:
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Предыдущий" and self.slide_num > 1:
                     self.slide_num -= 1
                     self.load_slide()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "В меню":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "В меню":
                     self.window.show_menu_view()

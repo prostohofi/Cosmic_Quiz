@@ -42,13 +42,23 @@ class MenuView(arcade.View):
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         for sprite_button in self.buttons:
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Выйти":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Выйти":
                 arcade.exit()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Начать":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Начать":
                 self.window.show_quiz_view()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Познать":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Познать":
                 self.window.show_knowledge_view()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Как играть":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Как играть":
                 self.window.show_how_to_play_view()
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "Статистика":
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "Статистика":
                 self.window.show_general_view()

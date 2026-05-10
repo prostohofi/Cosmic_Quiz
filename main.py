@@ -9,22 +9,6 @@ import views.how_to_play_view as howtoplay
 from buttons import Button
 from views import general_view, knowledge_view, menu_view, quiz_view, statistics_view
 
-"""
-TODO:
-    Изменить картинки во вьюшке "Как играть"
-
-    Сделать когда конец слайдов, сделать кнопки отличающимися.
-
-    В статисктике общей:
-    1) Пронумеровать строки
-    2) Подписать все цифры
-
-    Добавить кнопки:
-    Включить и выключить музыку
-
-    Изменить стиль кнопок(пример: элепс)
-"""
-
 
 class MyWindow(arcade.Window):
     """Класс собственного окна."""
@@ -33,11 +17,37 @@ class MyWindow(arcade.Window):
         """Инициализация класса."""
         super().__init__(fullscreen=True)
         self.sound = arcade.load_sound(config.SOUNDS_DIR / "PPK - Resurection.mp3")
-        self.sound.play(0.2, loop=True)
+        self.sound_player = self.sound.play(0.1, loop=True)
         self.right_answers = 0
         self.wrong_answers = 0
         self.timer = 0
         self.count_bg = 17
+        self.text_music = arcade.Text(
+            "Остановить/Запустить музыку",
+            self.width * 0.92,
+            self.height * 0.9,
+            anchor_x="center",
+            anchor_y="center",
+            align="center",
+            font_size=14,
+        )
+        self.buttons_music = arcade.SpriteList()
+        music_buttons = [("▶", 0.95), ("◼", 0.89)]
+        for text, x_offset in music_buttons:
+            button = Button(
+                self.width * 0.05,
+                self.height * 0.05,
+                self.width * x_offset,
+                self.height * 0.95,
+                text,
+            )
+            self.buttons_music.append(button)
+
+    def on_draw(self) -> None:
+        """Метод отрисовки."""
+        for button_music in self.buttons_music:
+            button_music.draw()
+        self.text_music.draw()
 
     def show_menu_view(self) -> None:
         """Метод показа меню."""
@@ -101,11 +111,11 @@ class MyWindow(arcade.Window):
     def make_buttons(self, buttons_names_list: list) -> None:
         """Метод создания кнопок."""
         buttons = arcade.SpriteList()
-        button_width = window.width * 0.15
-        button_height = window.height * 0.05
-        spacing_vert = window.height * 0.1
+        button_width = self.width * 0.15
+        button_height = self.height * 0.05
+        spacing_vert = self.height * 0.1
         buttons_names = buttons_names_list
-        button_x = window.width / (len(buttons_names) + 1)
+        button_x = self.width / (len(buttons_names) + 1)
         for button_name in buttons_names:
             button = Button(
                 button_width,
@@ -115,8 +125,24 @@ class MyWindow(arcade.Window):
                 text_str=button_name,
                 )
             buttons.append(button)
-            button_x += window.width / (len(buttons_names) + 1)
+            button_x += self.width / (len(buttons_names) + 1)
         return buttons
+
+    def on_mouse_press(self, x: int, y: int, button: int, _: int) -> None:
+        """Метод нажатия кнопок мыши."""
+        if button != arcade.MOUSE_BUTTON_LEFT:
+            return
+        for sprite_button in self.buttons_music:
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "▶":
+                    self.sound_player = self.sound.play(0.1, loop=True)
+            if sprite_button.collides_with_point(
+                (x, y),
+                ) and sprite_button.text_str == "◼":
+                    self.sound.stop(self.sound_player)
+
+
 
 
 

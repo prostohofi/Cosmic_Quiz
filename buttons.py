@@ -2,7 +2,8 @@
 import arcade
 import arcade.types
 
-FONT_SIZE = 30
+import config
+
 
 class Button(arcade.SpriteSolidColor):
     """Кнопка варианта ответа."""
@@ -28,7 +29,7 @@ class Button(arcade.SpriteSolidColor):
             arcade.color.VIOLET_BLUE,
             anchor_x="center",
             anchor_y="center",
-            font_size=FONT_SIZE,
+            font_size=config.FONT_SIZE_S,
         )
 
     def draw(self) -> None:

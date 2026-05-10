@@ -3,7 +3,6 @@
 import arcade
 
 import config
-from buttons import Button
 
 
 class HowToPlay(arcade.View):
@@ -56,5 +55,7 @@ class HowToPlay(arcade.View):
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         for sprite_button in self.buttons:
-            if sprite_button.collides_with_point((x, y)) and sprite_button.text_str == "В меню":
+            if sprite_button.collides_with_point(
+                 (x, y),
+                 ) and sprite_button.text_str == "В меню":
                     self.window.show_menu_view()

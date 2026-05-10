@@ -111,11 +111,12 @@ class QuizView(arcade.View):
             if not button_sprite.collides_with_point((x, y)):
                 continue
             if button_sprite.text_str == self.question["ответ"]:
+                self.load_question()
                 self.right_answers += 1
             else:
                 self.wrong_answers += 1
+                self.load_question()
             break
-        self.load_question()
 
     def load_question(self) -> None:
         """Загружает след. вопрос - новый текст и новые кнопки."""
